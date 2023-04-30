@@ -2,8 +2,10 @@ package app
 
 import (
 	"fmt"
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"log"
+	"os"
 
 	"github.com/dinozzzzzawrik/gohttp/internal/app/endpoint"
 	"github.com/dinozzzzzawrik/gohttp/internal/app/mw"
@@ -32,10 +34,17 @@ func New() (*App, error) {
 	return a, nil
 }
 
-func (a *App) Run() error {
-	fmt.Println("server running")
+func init() {
+	if err := godotenv.Load(); err != nil {
+		log.Print("No .env file found")
+	}
+}
 
-	err := a.echo.Start(":8080")
+func (a *App) Run() error {
+
+	port, _ := os.LookupEnv("PORT")
+
+	err := a.echo.Start(fmt.Sprintf(":%s", port))
 	if err != nil {
 		log.Fatal(err)
 	}
