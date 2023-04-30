@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/spatecon/echo-middleware-assessment/internal/pkg/app"
+	"github.com/dinozzzzzawrik/gohttp/internal/pkg/app"
 )
 
 func main() {

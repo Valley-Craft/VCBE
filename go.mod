@@ -1,4 +1,4 @@
-module github.com/spatecon/echo-middleware-assessment
+module github.com/dinozzzzzawrik/gohttp
 
 go 1.20
 
