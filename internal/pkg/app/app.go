@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"log"
 	"os"
 
@@ -27,9 +28,12 @@ func New() (*App, error) {
 
 	a.echo = echo.New()
 
+	a.echo.Use(middleware.CORS())
+
 	a.echo.Use(mw.RoleCheck)
 
-	a.echo.GET("/status", a.e.Status)
+	a.echo.GET("api/v1/players", a.e.PlayersEndPoint)
+	a.echo.POST("api/v1/form", a.e.FormEndPoint)
 
 	return a, nil
 }

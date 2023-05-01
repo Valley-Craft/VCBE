@@ -1,13 +1,15 @@
 package endpoint
 
 import (
-	"fmt"
 	"github.com/labstack/echo/v4"
+	"io"
+	"io/ioutil"
 	"net/http"
 )
 
 type Service interface {
-	DaysLeft() int64
+	Players() string
+	Form(string) bool
 }
 
 type Endpoint struct {
@@ -20,12 +22,40 @@ func New(s Service) *Endpoint {
 	}
 }
 
-func (e *Endpoint) Status(ctx echo.Context) error {
-	d := e.s.DaysLeft()
+func (e *Endpoint) PlayersEndPoint(ctx echo.Context) error {
+	data := e.s.Players()
 
-	s := fmt.Sprintf("Days left: %d", d)
+	err := ctx.String(http.StatusOK, data)
+	if err != nil {
+		return err
+	}
 
-	err := ctx.String(http.StatusOK, s)
+	return nil
+}
+
+func (e *Endpoint) FormEndPoint(ctx echo.Context) error {
+
+	body, err := ioutil.ReadAll(ctx.Request().Body)
+	if err != nil {
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+
+		}
+	}(ctx.Request().Body)
+
+	data := e.s.Form(string(body))
+
+	if data {
+		err = ctx.String(http.StatusAccepted, "")
+		if err != nil {
+			return err
+		}
+	}
+
+	err = ctx.String(http.StatusBadRequest, "")
 	if err != nil {
 		return err
 	}
