@@ -4,8 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorcon/rcon"
-	"io"
-	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 )
@@ -17,6 +16,16 @@ func New() *Service {
 	return &Service{}
 }
 
+type JSONPlayer struct {
+	UUID        string `json:"uuid"`
+	DisplayName string `json:"displayname"`
+}
+
+type Player struct {
+	UUID        string `json:"uuid"`
+	DisplayName string `json:"displayname"`
+}
+
 type Form struct {
 	Nickname string `json:"nickname"`
 	Name     string `json:"name"`
@@ -25,37 +34,44 @@ type Form struct {
 	Rules    string `json:"rules"`
 }
 
-func (s *Service) Players() string {
-
+func (s *Service) Players() ([]JSONPlayer, error) {
 	req, err := http.NewRequest("GET", "http://137.74.7.233:4567/v1/players", nil)
-
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	key, _ := os.LookupEnv("SERVER_KEY")
-
 	req.Header.Set("key", key)
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
+	defer func() {
+		err := resp.Body.Close()
 		if err != nil {
-
+			log.Println(err)
 		}
-	}(resp.Body)
+	}()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	var players []Player
+	decoder := json.NewDecoder(resp.Body)
+	err = decoder.Decode(&players)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	fmt.Println(string(body))
 
-	return string(body)
+	var jsonPlayers []JSONPlayer
+	for _, player := range players {
+		jsonPlayers = append(jsonPlayers, JSONPlayer{
+			UUID:        player.UUID,
+			DisplayName: player.DisplayName,
+		})
+	}
+
+	fmt.Println(jsonPlayers)
+
+	return jsonPlayers, nil
 }
 
 func (s *Service) Form(body string) bool {

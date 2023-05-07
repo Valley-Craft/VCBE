@@ -1,6 +1,7 @@
 package endpoint
 
 import (
+	"github.com/dinozzzzzawrik/gohttp/internal/app/service"
 	"github.com/labstack/echo/v4"
 	"io"
 	"io/ioutil"
@@ -8,7 +9,7 @@ import (
 )
 
 type Service interface {
-	Players() string
+	Players() ([]service.JSONPlayer, error)
 	Form(string) bool
 }
 
@@ -23,9 +24,9 @@ func New(s Service) *Endpoint {
 }
 
 func (e *Endpoint) PlayersEndPoint(ctx echo.Context) error {
-	data := e.s.Players()
+	data, _ := e.s.Players()
 
-	err := ctx.String(http.StatusOK, data)
+	err := ctx.JSON(http.StatusOK, data)
 	if err != nil {
 		return err
 	}
