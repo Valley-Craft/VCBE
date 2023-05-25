@@ -1,7 +1,7 @@
 package endpoint
 
 import (
-	"github.com/dinozzzzzawrik/gohttp/internal/app/service"
+	"github.com/Valley-Craft/VCBE/internal/app/service"
 	"github.com/labstack/echo/v4"
 	"io"
 	"io/ioutil"

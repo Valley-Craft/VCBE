@@ -1,4 +1,4 @@
-module github.com/dinozzzzzawrik/gohttp
+module github.com/Valley-Craft/VCBE
 
 go 1.20
 

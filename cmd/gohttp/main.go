@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/dinozzzzzawrik/gohttp/internal/pkg/app"
+	"github.com/Valley-Craft/VCBE/internal/pkg/app"
 )
 
 func main() {

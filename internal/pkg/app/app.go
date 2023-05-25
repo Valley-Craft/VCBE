@@ -8,9 +8,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/dinozzzzzawrik/gohttp/internal/app/endpoint"
-	"github.com/dinozzzzzawrik/gohttp/internal/app/mw"
-	"github.com/dinozzzzzawrik/gohttp/internal/app/service"
+	"github.com/Valley-Craft/VCBE/internal/app/endpoint"
+	"github.com/Valley-Craft/VCBE/internal/app/mw"
+	"github.com/Valley-Craft/VCBE/internal/app/service"
 )
 
 type App struct {
