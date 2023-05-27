@@ -10,12 +10,12 @@ COPY . .
 # Собираем приложение
 RUN go build -o main ./cmd/gohttp
 
-ENV PORT=8080
+ENV PORT=80
 ENV SERVER_KEY=8i8XtPNtLb24S87TkG82Sdktx4m5a8AZ
 ENV RCON_PASSWORD=3gd3X9P5a347Yk3AyLbVnCx432beTbPF
 
 # Указываем порт, на котором будет работать приложение
-EXPOSE 8080
+EXPOSE 80
 
 # Запускаем приложение при запуске контейнера
 CMD ["./main"]
