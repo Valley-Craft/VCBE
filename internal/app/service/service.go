@@ -176,7 +176,9 @@ func (s *Service) Donate(body string) bool {
 			}
 		}(conn)
 
-		_, err = conn.Execute(fmt.Sprintf("luckperms user %s parent add donate", donate.ClientName))
+		//_, err = conn.Execute(fmt.Sprintf("luckperms user %s parent add donate", donate.ClientName))
+		_, err = conn.Execute(fmt.Sprintf("say %s", donate.ClientName))
+
 		if err != nil {
 			panic(err)
 		}
