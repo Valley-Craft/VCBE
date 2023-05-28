@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 type Service struct {
@@ -33,6 +34,18 @@ type Form struct {
 	Age      string `json:"age"`
 	Wwd      string `json:"wwd"`
 	Rules    string `json:"rules"`
+}
+
+type Donate struct {
+	PubId       string `json:"pubId"`
+	ClientName  string `json:"clientName"`
+	Message     string `json:"message"`
+	Amount      string `json:"amount"`
+	Currency    string `json:"currency"`
+	Source      string `json:"source"`
+	Goal        string `json:"goal"`
+	IsPublished bool   `json:"isPublished"`
+	CreatedAt   string `json:"createdAt"`
 }
 
 func sendWebHook(nickname, name, age, wwd, rules, status string) {
@@ -136,4 +149,39 @@ func (s *Service) Form(body string) bool {
 	}
 
 	return false
+}
+
+func (s *Service) Donate(body string) bool {
+	var donate Donate
+	err := json.Unmarshal([]byte(body), &donate)
+
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+
+	amount, err := strconv.Atoi(donate.Amount)
+
+	if amount >= 50 {
+
+		rconPass, _ := os.LookupEnv("RCON_PASSWORD")
+
+		conn, err := rcon.Dial("137.74.7.233:25575", rconPass)
+		if err != nil {
+			panic(err)
+		}
+		defer func(conn *rcon.Conn) {
+			err := conn.Close()
+			if err != nil {
+
+			}
+		}(conn)
+
+		_, err = conn.Execute(fmt.Sprintf("luckperms user %s parent add donate", donate.ClientName))
+		if err != nil {
+			panic(err)
+		}
+
+		return true
+	}
+	return true
 }

@@ -34,6 +34,7 @@ func New() (*App, error) {
 
 	a.echo.GET("api/v1/players", a.e.PlayersEndPoint)
 	a.echo.POST("api/v1/form", a.e.FormEndPoint)
+	a.echo.POST("api/v1/donate", a.e.DonateEndPoint)
 
 	return a, nil
 }
