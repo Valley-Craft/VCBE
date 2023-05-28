@@ -13,6 +13,7 @@ RUN go build -o main ./cmd/gohttp
 ENV PORT=80
 ENV SERVER_KEY=8i8XtPNtLb24S87TkG82Sdktx4m5a8AZ
 ENV RCON_PASSWORD=3gd3X9P5a347Yk3AyLbVnCx432beTbPF
+ENV WEB_HOOK_URL=https://discord.com/api/webhooks/1112272251660812298/gRBriIzRsxYi4O-fjbrk8NyhK3kDpzhMUQBXaEQ_Ju7raxqdb7E_jRG32OTaghICXTEu
 
 # Указываем порт, на котором будет работать приложение
 EXPOSE 80

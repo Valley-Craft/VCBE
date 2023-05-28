@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorcon/rcon"
+	"github.com/gtuk/discordwebhook"
 	"log"
 	"net/http"
 	"os"
@@ -32,6 +33,30 @@ type Form struct {
 	Age      string `json:"age"`
 	Wwd      string `json:"wwd"`
 	Rules    string `json:"rules"`
+}
+
+func sendWebHook(nickname, name, age, wwd, rules, status string) {
+	var username = "Анкета"
+	data := Form{
+		Nickname: nickname,
+		Name:     name,
+		Age:      age,
+		Wwd:      wwd,
+		Rules:    rules,
+	}
+	content := fmt.Sprintf("Статус: %s\nНік: %s\nІм'я: %s\nРік: %s\nЩо буду робити: %s\nПравила: %s",
+		status, data.Nickname, data.Name, data.Age, data.Wwd, data.Rules)
+	var url, _ = os.LookupEnv("WEB_HOOK_URL")
+
+	message := discordwebhook.Message{
+		Username: &username,
+		Content:  &content,
+	}
+
+	err := discordwebhook.SendMessage(url, message)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func (s *Service) Players() ([]JSONPlayer, error) {
@@ -103,7 +128,11 @@ func (s *Service) Form(body string) bool {
 			panic(err)
 		}
 
+		sendWebHook(person.Nickname, person.Name, person.Age, person.Wwd, person.Rules, "Прийнятий")
+
 		return true
+	} else {
+		sendWebHook(person.Nickname, person.Name, person.Age, person.Wwd, person.Rules, "Не прийнятий")
 	}
 
 	return false
