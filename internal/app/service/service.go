@@ -73,7 +73,7 @@ func sendWebHook(nickname, name, age, wwd, rules, status string) {
 }
 
 func (s *Service) Players() ([]JSONPlayer, error) {
-	req, err := http.NewRequest("GET", "http://137.74.7.233:4567/v1/players", nil)
+	req, err := http.NewRequest("GET", "http://178.63.27.177:4567/v1/players", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -125,7 +125,7 @@ func (s *Service) Form(body string) bool {
 
 		rconPass, _ := os.LookupEnv("RCON_PASSWORD")
 
-		conn, err := rcon.Dial("137.74.7.233:25575", rconPass)
+		conn, err := rcon.Dial("178.63.27.177:25575", rconPass)
 		if err != nil {
 			panic(err)
 		}
